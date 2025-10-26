@@ -1,5 +1,3 @@
-import fetch from 'node-fetch'; // Standard way to make HTTP requests in Node.js
-
 /**
  * Vercel Serverless Function Handler
  * This function will be accessible at the /api/steam-proxy endpoint.

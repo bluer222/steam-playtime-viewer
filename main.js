@@ -17,12 +17,24 @@ function processSteamGames(response) {
         //this gets just the denominator of the fraction
         game.fractionOfHours = 2 ** power;
     });
+
+    error = games.reduce((sum, game) => sum + totalHours*(1/game.fractionOfHours), 0);
+    errorPerGame = games.map(game => {
+        let roundedHours = totalHours*(1/game.fractionOfHours);
+        let error = (roundedHours - game.playtime_forever)/60;
+        return { appid: game.appid, originalHours: game.playtime_forever, roundedHours: roundedHours, error: error };
+    });
+    console.log("Rounding errors per game:", errorPerGame);
+    console.log("Total hours:", totalHours/60);
+    console.log("Total hours with rounding:", error/60);
+    console.log("Total rounding error in hours:", (totalHours-error)/60);
+
     return games;
 }
 
-//do a breadth first search to find space for each game
+//do a depth first search to find space for each game
 function findSpotToInsert(layer, layersFartherDownToGo) {
-    console.log("Finding spot in layer:", layer, "with layersFartherDownToGo:", layersFartherDownToGo);
+    //console.log("Finding spot in layer:", layer, "with layersFartherDownToGo:", layersFartherDownToGo);
     //if we are at the correct debth, and there is room, return this layer
     if (layersFartherDownToGo == 0 && layer.length < 2) {
         return layer;
