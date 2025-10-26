@@ -66,7 +66,7 @@ function findSpotToInsert(layer, layersFartherDownToGo) {
         //create a new layer here
         layer.push([]);
         //and go down it
-        return findSpotToInsert(layer[layer.length-1], layersFartherDownToGo-1);
+        return findSpotToInsert(layer[layer.length - 1], layersFartherDownToGo - 1);
     }
     //we need to backtrack and take the second item
     return false;
@@ -125,12 +125,12 @@ function createElementsFromArangement(arangement, layer) {
         itemContainer.style.display = 'flex';
         itemContainer.style.justifyContent = 'center';
         itemContainer.style.alignItems = 'center';
-        if(isVerticalSplit){
-            itemContainer.width = '50%';
-            itemContainer.height = '100%';
-        }else{
-            itemContainer.width = '100%';
-            itemContainer.height = '50%';
+        if (isVerticalSplit) {
+            itemContainer.style.width = '50%';
+            itemContainer.style.height = '100%';
+        } else {
+            itemContainer.style.width = '100%';
+            itemContainer.style.height = '50%';
         }
 
         if (Array.isArray(item)) {
@@ -144,6 +144,9 @@ function createElementsFromArangement(arangement, layer) {
             img.style.width = '100%';
             img.style.height = '100%';
             img.style.objectFit = 'cover';
+            //1:2 for vertical, 2:1 for horizontal
+            //img.style.aspectRatio = isVerticalSplit ? 9/16 : 16/9;
+
             itemContainer.appendChild(img);
         }
         container.appendChild(itemContainer);
@@ -164,12 +167,9 @@ function createImageElement(game, isVertical) {
     }
 
     img.src = baseUrl;
-    //1:2 for vertical, 2:1 for horizontal
-    img.aspectRatio = 1 / 2 ? isVertical : 2 / 1;
-
     img.title = `You have ${game.playtime_forever}hrs in ${game.appid}`;
     //fallback if image doesnt exist
-    img.onerror = function() {
+    img.onerror = function () {
         if (fallbackUrl) {
             img.src = fallbackUrl;
             //remove onerror to prevent infinite loop
@@ -179,7 +179,7 @@ function createImageElement(game, isVertical) {
     return img;
 }
 
-function main(response){
+function main(response) {
     const games = processSteamGames(response);
     const arangement = createGameArangement(games);
     const elements = createElementsFromArangement(arangement, 0);
